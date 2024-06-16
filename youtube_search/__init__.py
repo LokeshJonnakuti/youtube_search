@@ -1,6 +1,6 @@
-import requests
 import urllib.parse
 import json
+from security import safe_requests
 
 
 class YoutubeSearch:
@@ -13,9 +13,9 @@ class YoutubeSearch:
         encoded_search = urllib.parse.quote_plus(self.search_terms)
         BASE_URL = "https://youtube.com"
         url = f"{BASE_URL}/results?search_query={encoded_search}"
-        response = requests.get(url).text
+        response = safe_requests.get(url).text
         while "ytInitialData" not in response:
-            response = requests.get(url).text
+            response = safe_requests.get(url).text
         results = self._parse_html(response)
         if self.max_results is not None and len(results) > self.max_results:
             return results[: self.max_results]
